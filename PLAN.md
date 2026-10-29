@@ -296,12 +296,12 @@ Dependency order: contracts/schema → manual → simulation → optimizer → s
 ## 12. Progress Checklist, Current State, Decisions Log
 
 ### Progress checklist
-- [ ] Plan reviewed
-- [ ] Frontend/backend start locally
-- [ ] Schema and seed data initialize
-- [ ] Manual observations work end-to-end
+- [x] Plan reviewed
+- [x] Frontend/backend start locally
+- [x] Schema and seed data initialize
+- [x] Manual observations work end-to-end
 - [ ] Simulation works independently of video
-- [ ] Congestion appears for all four approaches
+- [x] Congestion appears for all four approaches
 - [ ] Bounded recommendation, scores, and reason work
 - [ ] Fairness ceiling is visible and explainable
 - [ ] Operator-confirmed emergency request is recorded
@@ -314,12 +314,12 @@ Dependency order: contracts/schema → manual → simulation → optimizer → s
 - [ ] README enables a fresh demo and explains limits
 
 ### CURRENT STATE
-- **Plan status:** Updated from user answers; ready for review
-- **Project code:** Not started
-- **Completed slice:** Planning
+- **Plan status:** Active execution
+- **Project code:** Slices 1, 2, and 3 completed
+- **Completed slice:** Manual count input and congestion estimator (Slice 3)
 - **Open risk:** YOLO weights/runtime and reliable mapping to four approaches need early feasibility confirmation. The referenced brief preview was truncated; this plan uses the visible brief content and the user's answers.
-- **Next action:** During setup, select a suitable sample video and confirm pretrained YOLO availability.
-- **Last updated:** 2026-10-29
+- **Next action:** Implement seeded simulation input (Slice 4)
+- **Last updated:** 2026-10-30
 
 ### Decisions log
 
@@ -332,6 +332,7 @@ Dependency order: contracts/schema → manual → simulation → optimizer → s
 | 2026-10-29 | Operator confirmation establishes demo emergency trust | Safe understandable default while evaluation requirements are unknown |
 | 2026-10-29 | Generic versioned instruction JSON, simulation-only/not sent | User confirmed this is fine; the demo displays a simple example and never sends it to real equipment |
 | 2026-10-29 | Retain 8–45 s green, 3 s yellow, 1 s all-red, 90 s fairness defaults | User approved these editable demo values; not field guidance |
+| 2026-10-30 | Congestion thresholds: low (<=4), medium (5-12), high (>=13) | Clear, transparent demo queue classification; easily configurable in estimator |
 
 ### Five questions about remaining unclear or risky choices
 
