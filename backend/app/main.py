@@ -1,20 +1,35 @@
 """
 Main entry point for the Smart Junction Decision Engine FastAPI backend.
 
-Provides health checks, API routing, and CORS middleware for the simulation dashboard.
+Provides health checks, API routing, database initialization, and CORS middleware
+for the simulation dashboard.
 NOTE: This software is a simulation engine and does NOT transmit commands to physical hardware.
 """
 
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings
+from app.db import init_db, check_db_health
 
 settings = get_settings()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Application lifespan context manager.
+    Runs repeatable SQLite schema creation and seed initialization on startup.
+    """
+    init_db()
+    yield
+
 
 app = FastAPI(
     title=settings.app_name,
     description="Explainable traffic junction decision engine and simulation (does not connect to hardware)",
     version="0.1.0",
+    lifespan=lifespan,
 )
 
 # Cross-Origin Resource Sharing (CORS) for React frontend integration
@@ -43,14 +58,13 @@ def read_root():
 def get_health():
     """
     Health check endpoint matching the PLAN.md API specification.
-    Returns application status, version, and database readiness.
+    Returns status, version, and database connectivity.
     """
+    db_status = check_db_health()
     return {
-        "status": "healthy",
+        "status": "healthy" if db_status == "connected" else "degraded",
         "version": "0.1.0",
-        "database": "uninitialized_skeleton",
-        "mode": "simulation_only",
-        "transmission_status": "not_sent",
+        "database": db_status,
     }
 
 
@@ -63,4 +77,3 @@ if __name__ == "__main__":
         port=settings.port,
         reload=settings.debug,
     )
-
