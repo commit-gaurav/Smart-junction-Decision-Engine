@@ -18,6 +18,7 @@ from app.inputs.simulation import generate_simulated_observation
 from app.services.estimator import build_observation
 from app.services.history import get_current_phase, record_decision
 from app.services.optimizer import recommend_phase, score_approaches
+from app.services.phase_controller import queue_plan
 
 router = APIRouter(prefix="/api", tags=["traffic"])
 
@@ -27,8 +28,9 @@ def process_and_record_decision(
     approaches: List[ApproachObservationItem],
 ) -> DecisionSummary:
     """
-    Score approaches, recommend next green phase, and persist the decision
-    and its four score rows atomically in SQLite.
+    Score approaches, recommend next green phase, persist the decision
+    and its four score rows atomically in SQLite, and queue the planned decision
+    into the phase controller for boundary-only application.
     """
     settings = get_settings()
     current_phase = get_current_phase()
@@ -55,6 +57,9 @@ def process_and_record_decision(
         scores=recommendation["scored_approaches"],
     )
 
+    # Queue ordinary plan change without interrupting active phase
+    queue_plan(decision_id, recommendation["next_phase_code"])
+
     return DecisionSummary(
         decision_id=decision_id,
         current_phase_code=current_phase,
@@ -70,7 +75,7 @@ def process_and_record_decision(
 def submit_manual_observation(payload: ManualObservationRequest):
     """
     Accept manual vehicle counts and optional wait times for all four approaches (N, E, S, W).
-    Estimates congestion, scores approaches, generates a planned decision, and persists in SQLite.
+    Estimates congestion, scores approaches, generates a planned decision, queues it, and persists in SQLite.
     """
     normalized = normalize_manual_counts(payload)
     response = build_observation(normalized, source="manual")
@@ -81,7 +86,7 @@ def submit_manual_observation(payload: ManualObservationRequest):
 @router.post("/observations/simulate", response_model=SimulationObservationResponse)
 def submit_simulated_observation(payload: SimulationObservationRequest = SimulationObservationRequest()):
     """
-    Generate, estimate, score, and persist a simulated traffic observation and decision.
+    Generate, estimate, score, queue, and persist a simulated traffic observation and decision.
     Supports profiles: 'balanced', 'rush', and 'sparse'.
     """
     response = generate_simulated_observation(seed=payload.seed, profile=payload.profile or "balanced")
