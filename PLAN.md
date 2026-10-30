@@ -300,7 +300,7 @@ Dependency order: contracts/schema → manual → simulation → optimizer → s
 - [x] Frontend/backend start locally
 - [x] Schema and seed data initialize
 - [x] Manual observations work end-to-end
-- [ ] Simulation works independently of video
+- [x] Simulation works independently of video
 - [x] Congestion appears for all four approaches
 - [ ] Bounded recommendation, scores, and reason work
 - [ ] Fairness ceiling is visible and explainable
@@ -315,10 +315,10 @@ Dependency order: contracts/schema → manual → simulation → optimizer → s
 
 ### CURRENT STATE
 - **Plan status:** Active execution
-- **Project code:** Slices 1, 2, and 3 completed
-- **Completed slice:** Manual count input and congestion estimator (Slice 3)
+- **Project code:** Slices 1, 2, 3, and 4 completed
+- **Completed slice:** Seeded simulation input (Slice 4)
 - **Open risk:** YOLO weights/runtime and reliable mapping to four approaches need early feasibility confirmation. The referenced brief preview was truncated; this plan uses the visible brief content and the user's answers.
-- **Next action:** Implement seeded simulation input (Slice 4)
+- **Next action:** Implement phase optimizer and timing recommendations (Slice 5)
 - **Last updated:** 2026-10-30
 
 ### Decisions log
@@ -333,6 +333,7 @@ Dependency order: contracts/schema → manual → simulation → optimizer → s
 | 2026-10-29 | Generic versioned instruction JSON, simulation-only/not sent | User confirmed this is fine; the demo displays a simple example and never sends it to real equipment |
 | 2026-10-29 | Retain 8–45 s green, 3 s yellow, 1 s all-red, 90 s fairness defaults | User approved these editable demo values; not field guidance |
 | 2026-10-30 | Congestion thresholds: low (<=4), medium (5-12), high (>=13) | Clear, transparent demo queue classification; easily configurable in estimator |
+| 2026-10-30 | Isolated PRNG simulation profiles (balanced, rush, sparse) | Deterministic repeatability across demo runs without global random side-effects; reuses core persistence and estimation |
 
 ### Five questions about remaining unclear or risky choices
 

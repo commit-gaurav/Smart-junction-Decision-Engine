@@ -2,11 +2,12 @@
 Pydantic schemas and request/response validation contracts.
 """
 
-from typing import Dict, List, Literal, Optional
-from pydantic import BaseModel, Field, field_validator
+from typing import Any, Dict, List, Literal, Optional
+from pydantic import BaseModel, Field
 
 ApproachCode = Literal["N", "E", "S", "W"]
 CongestionLevel = Literal["low", "medium", "high"]
+SimulationProfile = Literal["balanced", "rush", "sparse"]
 
 
 class ApproachCounts(BaseModel):
@@ -48,3 +49,21 @@ class ManualObservationResponse(BaseModel):
     observed_at: str
     approaches: List[ApproachObservationItem]
 
+
+class SimulationObservationRequest(BaseModel):
+    """
+    Request payload for seeded traffic simulation.
+    seed and profile are optional; defaults to seed=42 and profile='balanced'.
+    """
+    seed: Optional[int] = Field(default=None, description="Optional seed for deterministic reproducibility")
+    profile: Optional[SimulationProfile] = Field(default="balanced", description="Simulation traffic profile")
+
+
+class SimulationObservationResponse(ManualObservationResponse):
+    """
+    Response contract for POST /api/observations/simulate.
+    Enriches the observation shape with simulation metadata and decision: null.
+    """
+    seed: int
+    profile: SimulationProfile
+    decision: Optional[Any] = None
