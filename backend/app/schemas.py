@@ -43,11 +43,23 @@ class ApproachObservationItem(BaseModel):
     waiting_seconds: int = Field(..., ge=0)
 
 
+class DecisionSummary(BaseModel):
+    """Summary of an optimizer decision persisted for an observation."""
+    decision_id: int
+    current_phase_code: Optional[str] = None
+    next_phase_code: str
+    recommended_green_seconds: int
+    reason: str
+    algorithm_version: str
+    execution_status: str
+
+
 class ManualObservationResponse(BaseModel):
     """Response contract for POST /api/observations/manual."""
     observation_id: int
     observed_at: str
     approaches: List[ApproachObservationItem]
+    decision: Optional[DecisionSummary] = None
 
 
 class SimulationObservationRequest(BaseModel):
@@ -62,8 +74,7 @@ class SimulationObservationRequest(BaseModel):
 class SimulationObservationResponse(ManualObservationResponse):
     """
     Response contract for POST /api/observations/simulate.
-    Enriches the observation shape with simulation metadata and decision: null.
+    Enriches the observation shape with simulation metadata and decision summary.
     """
     seed: int
     profile: SimulationProfile
-    decision: Optional[Any] = None

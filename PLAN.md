@@ -302,8 +302,8 @@ Dependency order: contracts/schema → manual → simulation → optimizer → s
 - [x] Manual observations work end-to-end
 - [x] Simulation works independently of video
 - [x] Congestion appears for all four approaches
-- [ ] Bounded recommendation, scores, and reason work
-- [ ] Fairness ceiling is visible and explainable
+- [x] Bounded recommendation, scores, and reason work
+- [x] Fairness ceiling is visible and explainable
 - [ ] Operator-confirmed emergency request is recorded
 - [ ] Safe transitions prevent conflicting greens
 - [ ] Ordinary updates apply at boundaries
@@ -315,10 +315,10 @@ Dependency order: contracts/schema → manual → simulation → optimizer → s
 
 ### CURRENT STATE
 - **Plan status:** Active execution
-- **Project code:** Slices 1, 2, 3, and 4 completed
-- **Completed slice:** Seeded simulation input (Slice 4)
+- **Project code:** Slices 1, 2, 3, 4, and 5 completed
+- **Completed slice:** Phase optimizer, approach scoring, fairness ceiling, and decision persistence (Slice 5)
 - **Open risk:** YOLO weights/runtime and reliable mapping to four approaches need early feasibility confirmation. The referenced brief preview was truncated; this plan uses the visible brief content and the user's answers.
-- **Next action:** Implement phase optimizer and timing recommendations (Slice 5)
+- **Next action:** Implement phase controller and safe simulated phase transitions (Slice 6)
 - **Last updated:** 2026-10-30
 
 ### Decisions log
@@ -334,6 +334,7 @@ Dependency order: contracts/schema → manual → simulation → optimizer → s
 | 2026-10-29 | Retain 8–45 s green, 3 s yellow, 1 s all-red, 90 s fairness defaults | User approved these editable demo values; not field guidance |
 | 2026-10-30 | Congestion thresholds: low (<=4), medium (5-12), high (>=13) | Clear, transparent demo queue classification; easily configurable in estimator |
 | 2026-10-30 | Isolated PRNG simulation profiles (balanced, rush, sparse) | Deterministic repeatability across demo runs without global random side-effects; reuses core persistence and estimation |
+| 2026-10-30 | Demand/wait scoring (weights 1.0/0.5), 90s fairness ceiling, deterministic NESW tie-breaker, and transactional decision persistence | Ensures explainable, bounded signal recommendations with strict audit persistence in SQLite |
 
 ### Five questions about remaining unclear or risky choices
 

@@ -48,6 +48,14 @@ try:
             default=30, description="Freshness window for observations before flagged stale"
         )
 
+        # Optimizer Scoring & Timing Weights
+        algorithm_version: str = Field(default="1.0.0", description="Decision engine version")
+        demand_weight: float = Field(default=1.0, description="Multiplier for vehicle count in approach scoring")
+        wait_weight: float = Field(default=0.5, description="Multiplier for waiting seconds in approach scoring")
+        green_extension_seconds_per_vehicle: int = Field(
+            default=2, description="Seconds of green allocated per vehicle above minimum"
+        )
+
         # Optional Model Configuration (pre-trained YOLO video vehicle detector)
         # Manual counts and seeded simulation operate independently of this setting.
         yolo_model_path: Optional[str] = Field(
@@ -93,6 +101,14 @@ except ImportError:
         planning_tick_seconds: int = int(os.getenv("PLANNING_TICK_SECONDS", "1"))
         stale_threshold_seconds: int = int(os.getenv("STALE_THRESHOLD_SECONDS", "30"))
 
+        # Optimizer Scoring & Timing Weights
+        algorithm_version: str = os.getenv("ALGORITHM_VERSION", "1.0.0")
+        demand_weight: float = float(os.getenv("DEMAND_WEIGHT", "1.0"))
+        wait_weight: float = float(os.getenv("WAIT_WEIGHT", "0.5"))
+        green_extension_seconds_per_vehicle: int = int(
+            os.getenv("GREEN_EXTENSION_SECONDS_PER_VEHICLE", "2")
+        )
+
         # Optional Model Configuration
         yolo_model_path: Optional[str] = os.getenv("YOLO_MODEL_PATH", None) or None
         yolo_confidence_threshold: float = float(
@@ -104,4 +120,3 @@ except ImportError:
 def get_settings() -> Settings:
     """Return cached application settings instance."""
     return Settings()
-
