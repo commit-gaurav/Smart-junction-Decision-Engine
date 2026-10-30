@@ -304,7 +304,7 @@ Dependency order: contracts/schema → manual → simulation → optimizer → s
 - [x] Congestion appears for all four approaches
 - [x] Bounded recommendation, scores, and reason work
 - [x] Fairness ceiling is visible and explainable
-- [ ] Operator-confirmed emergency request is recorded
+- [x] Operator-confirmed emergency request is recorded
 - [x] Safe transitions prevent conflicting greens
 - [x] Ordinary updates apply at boundaries
 - [ ] Dashboard shows state/countdown/recommendation/next phase
@@ -315,10 +315,10 @@ Dependency order: contracts/schema → manual → simulation → optimizer → s
 
 ### CURRENT STATE
 - **Plan status:** Active execution
-- **Project code:** Slices 1, 2, 3, 4, 5, and 6 completed
-- **Completed slice:** Phase controller, centralized safe transitions, and boundary-only queueing (Slice 6)
+- **Project code:** Slices 1, 2, 3, 4, 5, 6, and 7 completed
+- **Completed slice:** Operator-confirmed emergency priority and safe boundary scheduling (Slice 7)
 - **Open risk:** YOLO weights/runtime and reliable mapping to four approaches need early feasibility confirmation. The referenced brief preview was truncated; this plan uses the visible brief content and the user's answers.
-- **Next action:** Implement operator-confirmed emergency priority (Slice 7)
+- **Next action:** Implement React dashboard UI with live countdown and approach cards (Slice 8)
 - **Last updated:** 2026-10-30
 
 ### Decisions log
@@ -336,6 +336,7 @@ Dependency order: contracts/schema → manual → simulation → optimizer → s
 | 2026-10-30 | Isolated PRNG simulation profiles (balanced, rush, sparse) | Deterministic repeatability across demo runs without global random side-effects; reuses core persistence and estimation |
 | 2026-10-30 | Demand/wait scoring (weights 1.0/0.5), 90s fairness ceiling, deterministic NESW tie-breaker, and transactional decision persistence | Ensures explainable, bounded signal recommendations with strict audit persistence in SQLite |
 | 2026-10-30 | Centralized phase controller state machine (GREEN -> YELLOW -> ALL_RED -> GREEN) | Strictly prevents conflicting greens; queues ordinary decisions until safe clearance boundaries |
+| 2026-10-30 | Operator-confirmed emergency scheduling at next safe boundary | Eliminates spoofing by requiring explicit operator confirmation; serves emergency after clearance without resetting other waits |
 
 ### Five questions about remaining unclear or risky choices
 

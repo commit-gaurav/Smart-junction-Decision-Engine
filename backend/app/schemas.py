@@ -78,3 +78,28 @@ class SimulationObservationResponse(ManualObservationResponse):
     """
     seed: int
     profile: SimulationProfile
+
+
+class EmergencyCreateRequest(BaseModel):
+    """
+    Request contract for POST /api/emergencies.
+    Strictly requires operator_confirmed=True. Trust cannot be inferred from typed labels or video.
+    """
+    approach: ApproachCode
+    operator_confirmed: bool = Field(
+        ...,
+        description="Explicit confirmation from human operator. Must be true to trust.",
+    )
+    expires_in_seconds: Optional[int] = Field(
+        default=60,
+        ge=5,
+        description="Optional expiration window in seconds for the emergency request.",
+    )
+
+
+class EmergencyResponse(BaseModel):
+    """Response contract for POST /api/emergencies and POST /api/emergencies/{id}/cancel."""
+    request_id: int
+    status: str
+    scheduled_phase: Optional[str] = None
+    reason: str
